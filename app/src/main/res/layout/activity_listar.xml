@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/input_background"
+    android:orientation="vertical"
+    tools:context=".ListarActivity">
+
+    <!-- Header -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/gradient_background"
+        android:orientation="vertical"
+        android:padding="28dp"
+        android:elevation="4dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="📚 Lista de Estudiantes"
+            android:textColor="@color/text_light"
+            android:textSize="26sp"
+            android:textStyle="bold"
+            android:letterSpacing="0.01"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="Toca un estudiante para ver detalles"
+            android:textColor="@color/text_light"
+            android:textSize="14sp"
+            android:alpha="0.9"/>
+    </LinearLayout>
+
+    <!-- Lista con mejores márgenes -->
+    <ListView
+        android:id="@+id/lista_estudiantes"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_margin="20dp"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="12dp"
+        android:clipToPadding="false"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"/>
+
+    <!-- Botón Agregar -->
+    <Button
+        android:id="@+id/boton_agregar"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/button_primary"
+        android:text="➕ Agregar Estudiante"
+        android:textColor="@color/text_light"
+        android:textSize="17sp"
+        android:textStyle="bold"
+        android:textAllCaps="false"
+        android:elevation="6dp"/>
+
+</LinearLayout>

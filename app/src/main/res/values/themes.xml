@@ -1,0 +1,17 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+  <!-- Base application theme. -->
+  <style name="Base.Theme.Prueba2Android" parent="Theme.Material3.DayNight.NoActionBar">
+    <!-- Customize your light theme here. -->
+    <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+
+    <!-- Custom Button Style -->
+    <item name="buttonStyle">@style/Widget.App.Button</item>
+  </style>
+
+  <style name="Theme.Prueba2Android" parent="Base.Theme.Prueba2Android" />
+
+  <!-- Custom Button Style Definition -->
+  <style name="Widget.App.Button" parent="Widget.MaterialComponents.Button">
+    <item name="android:backgroundTint">#31372b</item>
+  </style>
+</resources>

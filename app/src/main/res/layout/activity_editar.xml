@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/input_background"
+    android:orientation="vertical"
+    tools:context=".EditarActivity">
+
+    <!-- Header -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/gradient_background"
+        android:orientation="vertical"
+        android:padding="28dp"
+        android:elevation="4dp">
+
+        <TextView
+            android:id="@+id/editar_titulo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="✏️ Editar Estudiante"
+            android:textColor="@color/text_light"
+            android:textSize="26sp"
+            android:textStyle="bold"
+            android:letterSpacing="0.01"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="Modifica los datos del estudiante"
+            android:textColor="@color/text_light"
+            android:textSize="14sp"
+            android:alpha="0.9"/>
+    </LinearLayout>
+
+    <!-- Formulario -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="24dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/card_background"
+                android:elevation="6dp"
+                android:orientation="vertical"
+                android:padding="24dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Nombre"
+                    android:textColor="@color/text_primary"
+                    android:textSize="15sp"
+                    android:textStyle="bold"/>
+
+                <EditText
+                    android:id="@+id/input_nombre"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/input_background"
+                    android:hint="Ej: Juan"
+                    android:inputType="text"
+                    android:paddingStart="18dp"
+                    android:paddingEnd="18dp"
+                    android:textSize="16sp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:text="Apellidos"
+                    android:textColor="@color/text_primary"
+                    android:textSize="15sp"
+                    android:textStyle="bold"/>
+
+                <EditText
+                    android:id="@+id/input_apellidos"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/input_background"
+                    android:hint="Ej: Pérez González"
+                    android:inputType="text"
+                    android:paddingStart="18dp"
+                    android:paddingEnd="18dp"
+                    android:textSize="16sp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:text="Edad"
+                    android:textColor="@color/text_primary"
+                    android:textSize="15sp"
+                    android:textStyle="bold"/>
+
+                <EditText
+                    android:id="@+id/input_edad"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/input_background"
+                    android:hint="Ej: 20"
+                    android:inputType="number"
+                    android:paddingStart="18dp"
+                    android:paddingEnd="18dp"
+                    android:textSize="16sp"/>
+
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- Botones -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp"
+        android:background="@android:color/white"
+        android:elevation="8dp">
+
+        <Button
+            android:id="@+id/boton_editar"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:background="@drawable/button_primary"
+            android:text="💾 Guardar Cambios"
+            android:textColor="@color/text_light"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textAllCaps="false"
+            android:elevation="4dp"/>
+
+        <Button
+            android:id="@+id/boton_eliminar"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/button_danger"
+            android:text="🗑️ Eliminar"
+            android:textColor="@color/text_light"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textAllCaps="false"
+            android:elevation="4dp"/>
+
+        <Button
+            android:id="@+id/boton_cancelar"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/button_secondary"
+            android:text="Cancelar"
+            android:textColor="@color/primary"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textAllCaps="false"/>
+    </LinearLayout>
+
+</LinearLayout>
