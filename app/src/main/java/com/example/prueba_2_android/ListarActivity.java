@@ -14,6 +14,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
@@ -51,8 +52,8 @@ public class ListarActivity extends AppCompatActivity {
                 TextView item_nombre = convertView.findViewById(R.id.item_nombre);
                 TextView item_edad = convertView.findViewById(R.id.item_edad);
 
-                // Usamos los getters del modelo Estudiante
-                item_id.setText("ID: " + (position + 1)); // Mostrar un ID posicional, no el de Firestore
+                // Ahora mostramos el ID real del estudiante (no posicional)
+                item_id.setText("ID: " + estudiante.getId());
                 item_nombre.setText(estudiante.getNombre() + " " + estudiante.getApellidos());
                 item_edad.setText(estudiante.getEdad() + " años");
 
@@ -86,20 +87,22 @@ public class ListarActivity extends AppCompatActivity {
     }
 
     private void cargarEstudiantes() {
+        // Ordenar por el campo "id" en orden ascendente para mantener el orden correcto
         db.collection("estudiantes")
-            .get()
-            .addOnCompleteListener(task -> {
-                if (task.isSuccessful()) {
-                    listaEstudiantes.clear(); // Limpiar la lista antes de volver a llenarla
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-                        Estudiante estudiante = document.toObject(Estudiante.class);
-                        estudiante.setDocumentId(document.getId()); // ¡MUY IMPORTANTE! Guardar el ID del documento
-                        listaEstudiantes.add(estudiante);
+                .orderBy("id", Query.Direction.ASCENDING)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        listaEstudiantes.clear(); // Limpiar la lista antes de volver a llenarla
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            Estudiante estudiante = document.toObject(Estudiante.class);
+                            estudiante.setDocumentId(document.getId()); // ¡MUY IMPORTANTE! Guardar el ID del documento
+                            listaEstudiantes.add(estudiante);
+                        }
+                        adapter.notifyDataSetChanged(); // Notificar al adaptador que los datos han cambiado
+                    } else {
+                        Toast.makeText(ListarActivity.this, "Error al cargar estudiantes.", Toast.LENGTH_SHORT).show();
                     }
-                    adapter.notifyDataSetChanged(); // Notificar al adaptador que los datos han cambiado
-                } else {
-                    Toast.makeText(ListarActivity.this, "Error al cargar estudiantes.", Toast.LENGTH_SHORT).show();
-                }
-            });
+                });
     }
 }

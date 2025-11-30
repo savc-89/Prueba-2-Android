@@ -59,36 +59,37 @@ public class VerActivity extends AppCompatActivity {
 
     private void cargarDatosEstudiante() {
         db.collection("estudiantes").document(estudianteId).get()
-            .addOnSuccessListener(documentSnapshot -> {
-                if (documentSnapshot.exists()) {
-                    Estudiante estudiante = documentSnapshot.toObject(Estudiante.class);
-                    if (estudiante != null) {
-                        detalle_id.setText(estudianteId); // Mostramos el ID de Firestore
-                        detalle_nombre.setText(estudiante.getNombre());
-                        detalle_apellido.setText(estudiante.getApellidos());
-                        detalle_edad.setText(estudiante.getEdad() + " años");
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        Estudiante estudiante = documentSnapshot.toObject(Estudiante.class);
+                        if (estudiante != null) {
+                            // Mostrar el ID numérico en lugar del ID de Firestore
+                            detalle_id.setText(String.valueOf(estudiante.getId()));
+                            detalle_nombre.setText(estudiante.getNombre());
+                            detalle_apellido.setText(estudiante.getApellidos());
+                            detalle_edad.setText(estudiante.getEdad() + " años");
+                        }
+                    } else {
+                        Toast.makeText(VerActivity.this, "El estudiante no existe.", Toast.LENGTH_SHORT).show();
                     }
-                } else {
-                    Toast.makeText(VerActivity.this, "El estudiante no existe.", Toast.LENGTH_SHORT).show();
-                }
-            })
-            .addOnFailureListener(e -> {
-                Toast.makeText(VerActivity.this, "Error al cargar los datos.", Toast.LENGTH_SHORT).show();
-            });
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(VerActivity.this, "Error al cargar los datos.", Toast.LENGTH_SHORT).show();
+                });
     }
 
     private void eliminarEstudiante() {
         db.collection("estudiantes").document(estudianteId).delete()
-            .addOnSuccessListener(aVoid -> {
-                Toast.makeText(VerActivity.this, "Estudiante eliminado exitosamente", Toast.LENGTH_SHORT).show();
-                // Redirigir a ListarActivity y limpiar el stack de actividades
-                Intent intent = new Intent(VerActivity.this, ListarActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-                finish();
-            })
-            .addOnFailureListener(e -> {
-                Toast.makeText(VerActivity.this, "Error al eliminar el estudiante: " + e.getMessage(), Toast.LENGTH_LONG).show();
-            });
+                .addOnSuccessListener(aVoid -> {
+                    Toast.makeText(VerActivity.this, "Estudiante eliminado exitosamente", Toast.LENGTH_SHORT).show();
+                    // Redirigir a ListarActivity y limpiar el stack de actividades
+                    Intent intent = new Intent(VerActivity.this, ListarActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                    finish();
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(VerActivity.this, "Error al eliminar el estudiante: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                });
     }
 }

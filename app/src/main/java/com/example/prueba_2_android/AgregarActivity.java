@@ -2,7 +2,6 @@ package com.example.prueba_2_android;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -14,6 +13,8 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 public class AgregarActivity extends AppCompatActivity {
 
@@ -55,22 +56,8 @@ public class AgregarActivity extends AppCompatActivity {
 
             int edad = Integer.parseInt(edadStr);
 
-            // Crear objeto Estudiante
-            Estudiante nuevoEstudiante = new Estudiante(nombre, apellido, edad);
-
-            // Añadir a la colección "estudiantes" en Firestore
-            db.collection("estudiantes")
-                .add(nuevoEstudiante)
-                .addOnSuccessListener(documentReference -> {
-                    Toast.makeText(AgregarActivity.this, "Estudiante agregado exitosamente", Toast.LENGTH_SHORT).show();
-                    // Redireccionar a Listar
-                    Intent intent = new Intent(AgregarActivity.this, ListarActivity.class);
-                    startActivity(intent);
-                    finish(); // Finalizar para no volver con el botón atrás
-                })
-                .addOnFailureListener(e -> {
-                    Toast.makeText(AgregarActivity.this, "Error al agregar estudiante: " + e.getMessage(), Toast.LENGTH_LONG).show();
-                });
+            // Obtener el siguiente ID disponible
+            obtenerSiguienteId(nombre, apellido, edad);
         });
 
         boton_cancelar.setOnClickListener(v -> {
@@ -78,5 +65,44 @@ public class AgregarActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         });
+    }
+
+    private void obtenerSiguienteId(String nombre, String apellido, int edad) {
+        // Buscar el estudiante con el ID más alto
+        db.collection("estudiantes")
+                .orderBy("id", Query.Direction.DESCENDING)
+                .limit(1)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    int nuevoId = 1; // ID por defecto si no hay estudiantes
+
+                    if (!queryDocumentSnapshots.isEmpty()) {
+                        // Obtener el ID más alto y sumarle 1
+                        for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                            Estudiante ultimoEstudiante = document.toObject(Estudiante.class);
+                            nuevoId = ultimoEstudiante.getId() + 1;
+                        }
+                    }
+
+                    // Crear el nuevo estudiante con el ID calculado
+                    Estudiante nuevoEstudiante = new Estudiante(nombre, apellido, edad);
+                    nuevoEstudiante.setId(nuevoId);
+
+                    // Guardar en Firestore
+                    db.collection("estudiantes")
+                            .add(nuevoEstudiante)
+                            .addOnSuccessListener(documentReference -> {
+                                Toast.makeText(AgregarActivity.this, "Estudiante agregado exitosamente", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(AgregarActivity.this, ListarActivity.class);
+                                startActivity(intent);
+                                finish(); // Finalizar para no volver con el botón atrás
+                            })
+                            .addOnFailureListener(e -> {
+                                Toast.makeText(AgregarActivity.this, "Error al agregar estudiante: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                            });
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(AgregarActivity.this, "Error al obtener ID: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                });
     }
 }

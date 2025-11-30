@@ -55,22 +55,22 @@ public class EditarActivity extends AppCompatActivity {
 
     private void cargarDatosEstudiante() {
         db.collection("estudiantes").document(estudianteId).get()
-            .addOnSuccessListener(documentSnapshot -> {
-                if (documentSnapshot.exists()) {
-                    Estudiante estudiante = documentSnapshot.toObject(Estudiante.class);
-                    if (estudiante != null) {
-                        editar_titulo.setText("Editar Estudiante");
-                        input_nombre.setText(estudiante.getNombre());
-                        input_apellidos.setText(estudiante.getApellidos());
-                        input_edad.setText(String.valueOf(estudiante.getEdad()));
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        Estudiante estudiante = documentSnapshot.toObject(Estudiante.class);
+                        if (estudiante != null) {
+                            editar_titulo.setText("Editar Estudiante");
+                            input_nombre.setText(estudiante.getNombre());
+                            input_apellidos.setText(estudiante.getApellidos());
+                            input_edad.setText(String.valueOf(estudiante.getEdad()));
+                        }
+                    } else {
+                        Toast.makeText(EditarActivity.this, "El estudiante no existe.", Toast.LENGTH_SHORT).show();
                     }
-                } else {
-                    Toast.makeText(EditarActivity.this, "El estudiante no existe.", Toast.LENGTH_SHORT).show();
-                }
-            })
-            .addOnFailureListener(e -> {
-                Toast.makeText(EditarActivity.this, "Error al cargar los datos.", Toast.LENGTH_SHORT).show();
-            });
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(EditarActivity.this, "Error al cargar los datos.", Toast.LENGTH_SHORT).show();
+                });
     }
 
     private void guardarCambios() {
@@ -85,29 +85,43 @@ public class EditarActivity extends AppCompatActivity {
 
         int edad = Integer.parseInt(edadStr);
 
-        Estudiante estudianteActualizado = new Estudiante(nombre, apellidos, edad);
+        // Primero obtenemos el estudiante actual para conservar su ID
+        db.collection("estudiantes").document(estudianteId).get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        Estudiante estudianteActual = documentSnapshot.toObject(Estudiante.class);
 
-        db.collection("estudiantes").document(estudianteId).set(estudianteActualizado)
-            .addOnSuccessListener(aVoid -> {
-                Toast.makeText(EditarActivity.this, "Estudiante actualizado exitosamente", Toast.LENGTH_SHORT).show();
-                finish(); // Volver a la actividad anterior (VerActivity)
-            })
-            .addOnFailureListener(e -> {
-                Toast.makeText(EditarActivity.this, "Error al actualizar: " + e.getMessage(), Toast.LENGTH_LONG).show();
-            });
+                        // Crear estudiante actualizado conservando el ID original
+                        Estudiante estudianteActualizado = new Estudiante(nombre, apellidos, edad);
+                        estudianteActualizado.setId(estudianteActual.getId()); // Mantener el ID original
+
+                        // Actualizar en Firestore
+                        db.collection("estudiantes").document(estudianteId).set(estudianteActualizado)
+                                .addOnSuccessListener(aVoid -> {
+                                    Toast.makeText(EditarActivity.this, "Estudiante actualizado exitosamente", Toast.LENGTH_SHORT).show();
+                                    finish(); // Volver a la actividad anterior (VerActivity)
+                                })
+                                .addOnFailureListener(e -> {
+                                    Toast.makeText(EditarActivity.this, "Error al actualizar: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                                });
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(EditarActivity.this, "Error al obtener datos: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                });
     }
 
     private void eliminarEstudiante() {
         db.collection("estudiantes").document(estudianteId).delete()
-            .addOnSuccessListener(aVoid -> {
-                Toast.makeText(EditarActivity.this, "Estudiante eliminado exitosamente", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(EditarActivity.this, ListarActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-                finish();
-            })
-            .addOnFailureListener(e -> {
-                Toast.makeText(EditarActivity.this, "Error al eliminar: " + e.getMessage(), Toast.LENGTH_LONG).show();
-            });
+                .addOnSuccessListener(aVoid -> {
+                    Toast.makeText(EditarActivity.this, "Estudiante eliminado exitosamente", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(EditarActivity.this, ListarActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                    finish();
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(EditarActivity.this, "Error al eliminar: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                });
     }
 }

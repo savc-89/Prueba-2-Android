@@ -4,6 +4,7 @@ import com.google.firebase.firestore.Exclude;
 
 public class Estudiante {
     private String documentId;
+    private int id; // Campo numérico para el ID
     private String nombre;
     private String apellidos;
     private int edad;
@@ -24,6 +25,14 @@ public class Estudiante {
 
     public void setDocumentId(String documentId) {
         this.documentId = documentId;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getNombre() {
